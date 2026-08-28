@@ -1,17 +1,10 @@
 "use client";
 
 import { MapPin, X } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
+import { Button } from "@/components/common/Button/Button";
 import type { CamperForm, Engine, Filters, Transmission } from "@/lib/types";
 import styles from "./FilterPanel.module.css";
-import { Button } from "@/components/common/Button/Button";
-
-const emptyFilters: Filters = {
-  location: "",
-  form: "",
-  transmission: "",
-  engine: "",
-};
 
 const forms: { value: CamperForm; label: string }[] = [
   { value: "alcove", label: "Alcove" },
@@ -27,28 +20,32 @@ const engines: { value: Engine; label: string }[] = [
   { value: "electric", label: "Electric" },
 ];
 
-const transmissions: { value: Transmission; label: string }[] = [
+const transmissions: {
+  value: Transmission;
+  label: string;
+}[] = [
   { value: "automatic", label: "Automatic" },
   { value: "manual", label: "Manual" },
 ];
 
+type FilterPanelProps = {
+  filters: Filters;
+  onChange: (filters: Filters) => void;
+  onApply: () => void;
+  onClear: () => void;
+};
+
 export function FilterPanel({
+  filters,
+  onChange,
   onApply,
-}: {
-  onApply: (filters: Filters) => void;
-}) {
-  const [filters, setFilters] = useState<Filters>(emptyFilters);
-
+  onClear,
+}: FilterPanelProps) {
   const set = <K extends keyof Filters>(key: K, value: Filters[K]) => {
-    setFilters((previous) => ({
-      ...previous,
-      [key]: previous[key] === value ? "" : value,
-    }));
-  };
-
-  const clearFilters = () => {
-    setFilters(emptyFilters);
-    onApply(emptyFilters);
+    onChange({
+      ...filters,
+      [key]: filters[key] === value ? "" : value,
+    });
   };
 
   return (
@@ -60,12 +57,13 @@ export function FilterPanel({
 
         <div className={styles.locationField}>
           <MapPin size={20} />
+
           <input
             id="location"
             placeholder="City"
             value={filters.location}
             onChange={(event) =>
-              setFilters({
+              onChange({
                 ...filters,
                 location: event.target.value,
               })
@@ -112,18 +110,11 @@ export function FilterPanel({
       </div>
 
       <div className={styles.buttons}>
-        <Button
-          fullWidth
-          onClick={() =>
-            onApply({
-              ...filters,
-              location: filters.location.trim(),
-            })
-          }
-        >
+        <Button fullWidth onClick={onApply}>
           Search
         </Button>
-        <Button variant="secondary" fullWidth onClick={clearFilters}>
+
+        <Button variant="secondary" fullWidth onClick={onClear}>
           <X size={20} />
           Clear filters
         </Button>

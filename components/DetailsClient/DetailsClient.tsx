@@ -19,6 +19,12 @@ import styles from "./DetailsClient.module.css";
 export function DetailsClient({ camperId }: { camperId: string }) {
   const [tab, setTab] = useState<"features" | "reviews">("features");
   const [toast, setToast] = useState("");
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const [formErrors, setFormErrors] = useState({
+    name: "",
+    email: "",
+  });
 
   const camperQuery = useQuery({
     queryKey: ["camper", camperId],
@@ -49,13 +55,29 @@ export function DetailsClient({ camperId }: { camperId: string }) {
     const form = event.currentTarget;
     const data = new FormData(form);
 
+    const name = String(data.get("name")).trim();
+    const email = String(data.get("email")).trim();
+
+    const errors = {
+      name: name.length < 2 ? "Please enter your name." : "",
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        ? ""
+        : "Please enter your email.",
+    };
+
+    setFormErrors(errors);
+
+    if (errors.name || errors.email) {
+      return;
+    }
+
     booking.mutate(
+      { name, email },
       {
-        name: String(data.get("name")),
-        email: String(data.get("email")),
-      },
-      {
-        onSuccess: () => form.reset(),
+        onSuccess: () => {
+          form.reset();
+          setFormErrors({ name: "", email: "" });
+        },
       },
     );
   }
@@ -93,6 +115,8 @@ export function DetailsClient({ camperId }: { camperId: string }) {
         ]
       : [];
 
+  const activeImage = images[activeImageIndex] ?? images[0];
+
   const amenities = Array.isArray(camper.amenities)
     ? camper.amenities
     : [camper.amenities];
@@ -121,24 +145,41 @@ export function DetailsClient({ camperId }: { camperId: string }) {
       </p>
 
       <div className={styles.gallery}>
-        {images.map((image) => (
-          <button
-            type="button"
-            className={styles.galleryButton}
-            key={image.id}
-            aria-label={`Open ${camper.name} image`}
-            onClick={() =>
-              window.open(image.original, "_blank", "noopener,noreferrer")
-            }
-          >
+        {activeImage && (
+          <div className={styles.mainImage}>
             <Image
-              src={image.original}
-              alt={`${camper.name} gallery`}
+              src={activeImage.original}
+              alt={`${camper.name} — image ${activeImageIndex + 1}`}
               fill
-              sizes="calc(33vw - 40px)"
+              priority
+              sizes="632px"
             />
-          </button>
-        ))}
+          </div>
+        )}
+
+        {images.length > 1 && (
+          <div className={styles.thumbnails}>
+            {images.map((image, index) => (
+              <button
+                type="button"
+                key={image.id}
+                className={`${styles.thumbnail} ${
+                  index === activeImageIndex ? styles.activeThumbnail : ""
+                }`}
+                aria-label={`Show image ${index + 1}`}
+                aria-pressed={index === activeImageIndex}
+                onClick={() => setActiveImageIndex(index)}
+              >
+                <Image
+                  src={image.thumb || image.original}
+                  alt=""
+                  fill
+                  sizes="132px"
+                />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <p className={styles.description}>{camper.description}</p>
@@ -267,13 +308,54 @@ export function DetailsClient({ camperId }: { camperId: string }) {
           )}
         </section>
 
-        <form className={styles.booking} onSubmit={submit}>
+        <form className={styles.booking} onSubmit={submit} noValidate>
           <h2>Book your campervan now</h2>
           <p>Stay connected! We are always ready to help you.</p>
 
-          <input name="name" placeholder="Name*" required minLength={2} />
+          <div className={styles.formField}>
+            <input
+              className={formErrors.name ? styles.invalidField : ""}
+              name="name"
+              placeholder="Name*"
+              aria-invalid={Boolean(formErrors.name)}
+              aria-describedby={formErrors.name ? "name-error" : undefined}
+              onChange={() =>
+                setFormErrors((current) => ({
+                  ...current,
+                  name: "",
+                }))
+              }
+            />
 
-          <input name="email" type="email" placeholder="Email*" required />
+            {formErrors.name && (
+              <span id="name-error" className={styles.fieldError}>
+                {formErrors.name}
+              </span>
+            )}
+          </div>
+
+          <div className={styles.formField}>
+            <input
+              className={formErrors.email ? styles.invalidField : ""}
+              name="email"
+              type="email"
+              placeholder="Email*"
+              aria-invalid={Boolean(formErrors.email)}
+              aria-describedby={formErrors.email ? "email-error" : undefined}
+              onChange={() =>
+                setFormErrors((current) => ({
+                  ...current,
+                  email: "",
+                }))
+              }
+            />
+
+            {formErrors.email && (
+              <span id="email-error" className={styles.fieldError}>
+                {formErrors.email}
+              </span>
+            )}
+          </div>
 
           <div className={styles.dateField}>
             <CalendarDays />

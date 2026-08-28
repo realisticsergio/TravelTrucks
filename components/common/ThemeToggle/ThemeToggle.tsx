@@ -1,16 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import css from "./ThemeToggle.module.css";
 
-export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window === "undefined") {
-      return false;
-    }
+const THEME_CHANGE_EVENT = "traveltrucks-theme-change";
 
-    return localStorage.getItem("theme") === "dark";
-  });
+function getThemeSnapshot() {
+  return localStorage.getItem("theme") === "dark";
+}
+
+function getServerThemeSnapshot() {
+  return false;
+}
+
+function subscribeToTheme(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(THEME_CHANGE_EVENT, callback);
+
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(THEME_CHANGE_EVENT, callback);
+  };
+}
+
+export default function ThemeToggle() {
+  const isDark = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  );
 
   useEffect(() => {
     document.documentElement.setAttribute(
@@ -21,13 +39,12 @@ export default function ThemeToggle() {
 
   const toggleTheme = () => {
     const newIsDark = !isDark;
-
-    setIsDark(newIsDark);
-
     const theme = newIsDark ? "dark" : "light";
 
     localStorage.setItem("theme", theme);
     document.documentElement.setAttribute("data-theme", theme);
+
+    window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
   };
 
   return (

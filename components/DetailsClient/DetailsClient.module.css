@@ -58,7 +58,7 @@
   line-height: 32px;
 }
 
-.gallery {
+/* .gallery {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 48px;
@@ -77,8 +77,57 @@
 
 .galleryButton img {
   object-fit: cover;
+} */
+.gallery {
+  width: min(632px, 100%);
 }
 
+.mainImage {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--badges);
+}
+
+.mainImage img {
+  object-fit: cover;
+}
+
+.thumbnails {
+  margin-top: 16px;
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+}
+
+.thumbnail {
+  position: relative;
+  width: 132px;
+  height: 96px;
+  flex: 0 0 132px;
+  overflow: hidden;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--badges);
+  cursor: pointer;
+}
+
+.thumbnail img {
+  object-fit: cover;
+}
+
+.thumbnail:hover,
+.activeThumbnail {
+  border-color: var(--accent);
+}
+
+.thumbnail:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
 .description {
   margin: 28px 0 60px;
   color: var(--text);
@@ -211,7 +260,31 @@
 .booking textarea::placeholder {
   color: var(--muted);
 }
+.formField {
+  width: 100%;
+  margin-bottom: 14px;
+}
 
+.formField input {
+  margin-bottom: 0;
+}
+
+.booking .invalidField {
+  border: 1px solid #f04438;
+  background: #fee4e2;
+}
+
+.fieldError {
+  display: block;
+  margin-top: 4px;
+  color: #f04438;
+  font-size: 14px;
+  line-height: 20px;
+}
+.booking .invalidField:focus {
+  border-color: #f04438;
+  outline: none;
+}
 .dateField {
   position: relative;
 }
@@ -303,14 +376,24 @@
     padding-top: 32px;
   }
 
-  .gallery {
+  /* .gallery {
     grid-template-columns: 1fr;
   }
 
   .galleryButton {
     height: 260px;
-  }
+  } */
+  @media (max-width: 700px) {
+    .mainImage {
+      height: 320px;
+    }
 
+    .thumbnail {
+      width: 96px;
+      height: 72px;
+      flex-basis: 96px;
+    }
+  }
   .columns {
     margin-top: 28px;
   }

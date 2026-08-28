@@ -1,4 +1,7 @@
-.panel {
+/* .panel {
+  position: sticky;
+  top: 88px;
+  align-self: start;
   width: 360px;
   padding: 24px;
   display: flex;
@@ -7,8 +10,19 @@
   align-self: start;
   background: var(--surface-soft);
   border-radius: 20px;
+} */
+.panel {
+  position: sticky;
+  top: 88px;
+  width: 360px;
+  min-height: 840px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  background: var(--surface-soft);
+  border-radius: 20px;
 }
-
 .fieldLabel {
   display: block;
   margin-bottom: 8px;

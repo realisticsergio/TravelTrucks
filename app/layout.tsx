@@ -7,8 +7,12 @@ import { Header } from "@/components/Header/Header";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "TravelTrucks — Camper Rental",
-  description: "Find and book the perfect camper for your next road trip.",
+  title: {
+    default: "TravelTrucks — Camper Rental",
+    template: "%s | TravelTrucks",
+  },
+  description:
+    "Find, explore and book the perfect camper for your next journey.",
 };
 
 export default function RootLayout({
