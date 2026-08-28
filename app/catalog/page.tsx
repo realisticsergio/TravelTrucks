@@ -2,10 +2,11 @@
 
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { CamperCard } from "@/components/CamperCard";
-import { FilterPanel } from "@/components/FilterPanel";
+import { CamperCard } from "@/components/CamperCard/CamperCard";
+import { FilterPanel } from "@/components/FilterPanel/FilterPanel";
 import { getCampers } from "@/lib/api";
 import type { Filters } from "@/lib/types";
+import styles from "./page.module.css";
 
 const emptyFilters: Filters = {
   location: "",
@@ -26,9 +27,9 @@ export default function CatalogPage() {
   const campers = query.data?.pages.flatMap((page) => page.campers) ?? [];
 
   return (
-    <main className="catalog container">
+    <main className={styles.catalog}>
       <FilterPanel onApply={setFilters} />
-      <section className="catalogResults" aria-live="polite">
+      <section className={styles.results} aria-live="polite">
         {query.isLoading && <Status text="Loading campers…" />}
         {query.isError && (
           <Status text="Could not load campers. Please try again." error />
@@ -41,7 +42,7 @@ export default function CatalogPage() {
         ))}
         {query.hasNextPage && (
           <button
-            className="loadMore"
+            className={styles.loadMore}
             onClick={() => query.fetchNextPage()}
             disabled={query.isFetchingNextPage}
           >
@@ -54,5 +55,9 @@ export default function CatalogPage() {
 }
 
 function Status({ text, error = false }: { text: string; error?: boolean }) {
-  return <div className={`status ${error ? "error" : ""}`}>{text}</div>;
+  return (
+    <div className={`${styles.status} ${error ? styles.error : ""}`}>
+      {text}
+    </div>
+  );
 }

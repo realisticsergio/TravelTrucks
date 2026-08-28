@@ -1,0 +1,55 @@
+.toggle {
+  position: relative;
+
+  width: 52px;
+  height: 25px;
+
+  padding: 3px;
+  margin-left: 24px;
+
+  border: 1px solid var(--green);
+  border-radius: var(--radius-pill);
+
+  background-color: #6c717b;
+
+  cursor: pointer;
+
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  background-color: var(--white);
+  color: var(--green-darker);
+
+  font-size: 16px;
+  line-height: 1;
+
+  transform: translateX(0);
+
+  transition:
+    transform 200ms ease,
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+.dark {
+  background-color: var(--green-darker);
+  border-color: var(--green-darker);
+}
+
+.dark .icon {
+  transform: translateX(22px);
+  background-color: var(--white);
+  color: var(--green-darker);
+}

@@ -11,41 +11,75 @@ import {
   Star,
   Truck,
 } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { useState, type FormEvent } from "react";
+import { Button } from "@/components/common/Button/Button";
 import { createBooking, getCamper, getReviews } from "@/lib/api";
+import styles from "./DetailsClient.module.css";
 
 export function DetailsClient({ camperId }: { camperId: string }) {
+  const [tab, setTab] = useState<"features" | "reviews">("features");
+  const [toast, setToast] = useState("");
+
   const camperQuery = useQuery({
     queryKey: ["camper", camperId],
     queryFn: () => getCamper(camperId),
   });
+
   const reviewsQuery = useQuery({
     queryKey: ["reviews", camperId],
     queryFn: () => getReviews(camperId),
   });
-  const [tab, setTab] = useState<"features" | "reviews">("features");
-  const [toast, setToast] = useState("");
+
   const booking = useMutation({
     mutationFn: (data: { name: string; email: string }) =>
       createBooking(camperId, data),
+
     onSuccess: (data) => {
       setToast(data.message || "Booking request sent successfully!");
-      setTimeout(() => setToast(""), 5000);
+
+      window.setTimeout(() => {
+        setToast("");
+      }, 5000);
     },
   });
-  if (camperQuery.isLoading)
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
+
+    booking.mutate(
+      {
+        name: String(data.get("name")),
+        email: String(data.get("email")),
+      },
+      {
+        onSuccess: () => form.reset(),
+      },
+    );
+  }
+
+  if (camperQuery.isLoading) {
     return (
-      <main className="detailPage container">
-        <div className="status">Loading camper…</div>
+      <main className={styles.page}>
+        <div className={styles.status}>Loading camper…</div>
       </main>
     );
-  if (camperQuery.isError || !camperQuery.data)
+  }
+
+  if (camperQuery.isError || !camperQuery.data) {
     return (
-      <main className="detailPage container">
-        <div className="status error">Camper not found.</div>
+      <main className={styles.page}>
+        <div className={`${styles.status} ${styles.error}`}>
+          Camper not found.
+        </div>
       </main>
     );
+  }
+
   const camper = camperQuery.data;
+
   const images = camper.gallery?.length
     ? camper.gallery
     : camper.coverImage
@@ -58,37 +92,44 @@ export function DetailsClient({ camperId }: { camperId: string }) {
           },
         ]
       : [];
+
   const amenities = Array.isArray(camper.amenities)
     ? camper.amenities
     : [camper.amenities];
 
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    booking.mutate(
-      { name: String(data.get("name")), email: String(data.get("email")) },
-      { onSuccess: () => event.currentTarget.reset() },
-    );
-  }
   return (
-    <main className="detailPage container">
+    <main className={styles.page}>
       <h1>{camper.name}</h1>
-      <div className="meta">
-        <span className="rating">
+
+      <div className={styles.meta}>
+        <span className={styles.rating}>
           <Star size={16} fill="currentColor" />
           {camper.rating} ({camper.totalReviews} Reviews)
         </span>
+
         <span>
           <MapPin size={16} />
           {camper.location}
         </span>
       </div>
-      <p className="detailPrice">€{camper.price.toFixed(2)}</p>
-      <div className="gallery">
+
+      <p className={styles.price}>
+        €
+        {camper.price.toLocaleString("en-US", {
+          maximumFractionDigits: 2,
+        })}
+      </p>
+
+      <div className={styles.gallery}>
         {images.map((image) => (
           <button
+            type="button"
+            className={styles.galleryButton}
             key={image.id}
-            onClick={() => window.open(image.original, "_blank")}
+            aria-label={`Open ${camper.name} image`}
+            onClick={() =>
+              window.open(image.original, "_blank", "noopener,noreferrer")
+            }
           >
             <Image
               src={image.original}
@@ -99,67 +140,87 @@ export function DetailsClient({ camperId }: { camperId: string }) {
           </button>
         ))}
       </div>
-      <p className="detailDescription">{camper.description}</p>
-      <div className="tabs">
+
+      <p className={styles.description}>{camper.description}</p>
+
+      <div className={styles.tabs}>
         <button
-          className={tab === "features" ? "active" : ""}
+          type="button"
+          className={`${styles.tab} ${
+            tab === "features" ? styles.activeTab : ""
+          }`}
           onClick={() => setTab("features")}
         >
           Features
         </button>
+
         <button
-          className={tab === "reviews" ? "active" : ""}
+          type="button"
+          className={`${styles.tab} ${
+            tab === "reviews" ? styles.activeTab : ""
+          }`}
           onClick={() => setTab("reviews")}
         >
           Reviews
         </button>
       </div>
-      <div className="detailColumns">
-        <section className="tabContent">
+
+      <div className={styles.columns}>
+        <section className={styles.tabContent}>
           {tab === "features" ? (
             <>
-              <div className="badges featureBadges">
-                <span className="badge">
+              <div className={`${styles.badges} ${styles.featureBadges}`}>
+                <span className={styles.badge}>
                   <Settings2 />
                   {camper.transmission}
                 </span>
-                <span className="badge">
+
+                <span className={styles.badge}>
                   <Fuel />
                   {camper.engine}
                 </span>
-                <span className="badge">
+
+                <span className={styles.badge}>
                   <Truck />
                   {camper.form.replaceAll("_", " ")}
                 </span>
-                {amenities.map((a) => (
-                  <span className="badge" key={a}>
+
+                {amenities.map((amenity) => (
+                  <span className={styles.badge} key={amenity}>
                     <Check />
-                    {a}
+                    {amenity}
                   </span>
                 ))}
               </div>
+
               <h2>Vehicle details</h2>
-              <dl className="detailsList">
+
+              <dl className={styles.detailsList}>
                 <div>
                   <dt>Form</dt>
                   <dd>{camper.form.replaceAll("_", " ")}</dd>
                 </div>
+
                 <div>
                   <dt>Length</dt>
                   <dd>{camper.length}</dd>
                 </div>
+
                 <div>
                   <dt>Width</dt>
                   <dd>{camper.width}</dd>
                 </div>
+
                 <div>
                   <dt>Height</dt>
                   <dd>{camper.height}</dd>
                 </div>
+
                 <div>
                   <dt>Tank</dt>
                   <dd>{camper.tank}</dd>
                 </div>
+
                 <div>
                   <dt>Consumption</dt>
                   <dd>{camper.consumption}</dd>
@@ -167,20 +228,30 @@ export function DetailsClient({ camperId }: { camperId: string }) {
               </dl>
             </>
           ) : (
-            <div className="reviews">
+            <div className={styles.reviews}>
               {reviewsQuery.isLoading && <p>Loading reviews…</p>}
+
+              {reviewsQuery.isError && (
+                <p className={styles.error}>Could not load reviews.</p>
+              )}
+
               {reviewsQuery.data?.map((review) => (
                 <article key={review.id}>
-                  <div className="avatar">{review.reviewer_name[0]}</div>
+                  <div className={styles.avatar}>{review.reviewer_name[0]}</div>
+
                   <div>
                     <h3>{review.reviewer_name}</h3>
-                    <div className="stars">
-                      {[1, 2, 3, 4, 5].map((n) => (
+
+                    <div
+                      className={styles.stars}
+                      aria-label={`${review.reviewer_rating} out of 5 stars`}
+                    >
+                      {[1, 2, 3, 4, 5].map((number) => (
                         <Star
-                          key={n}
+                          key={number}
                           size={16}
                           fill={
-                            n <= review.reviewer_rating
+                            number <= review.reviewer_rating
                               ? "currentColor"
                               : "none"
                           }
@@ -188,34 +259,48 @@ export function DetailsClient({ camperId }: { camperId: string }) {
                       ))}
                     </div>
                   </div>
+
                   <p>{review.comment}</p>
                 </article>
               ))}
             </div>
           )}
         </section>
-        <form className="booking" onSubmit={submit}>
+
+        <form className={styles.booking} onSubmit={submit}>
           <h2>Book your campervan now</h2>
           <p>Stay connected! We are always ready to help you.</p>
+
           <input name="name" placeholder="Name*" required minLength={2} />
+
           <input name="email" type="email" placeholder="Email*" required />
-          <div className="dateField">
+
+          <div className={styles.dateField}>
             <CalendarDays />
-            <input type="date" aria-label="Booking date" />
+
+            <input name="bookingDate" type="date" aria-label="Booking date" />
           </div>
-          <textarea placeholder="Comment" rows={4} />
+
+          <textarea name="comment" placeholder="Comment" rows={4} />
+
           {booking.isError && (
-            <p className="formError">
+            <p className={styles.formError}>
               Could not send booking. Please try again.
             </p>
           )}
-          <button className="primaryButton" disabled={booking.isPending}>
+
+          <Button
+            type="submit"
+            className={styles.submitButton}
+            disabled={booking.isPending}
+          >
             {booking.isPending ? "Sending…" : "Send"}
-          </button>
+          </Button>
         </form>
       </div>
+
       {toast && (
-        <div className="toast">
+        <div className={styles.toast} role="status">
           <Check />
           {toast}
         </div>

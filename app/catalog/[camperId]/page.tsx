@@ -1,4 +1,4 @@
-import { DetailsClient } from "@/components/DetailsClient";
+import { DetailsClient } from "@/components/DetailsClient/DetailsClient";
 
 export default async function CamperPage({
   params,
