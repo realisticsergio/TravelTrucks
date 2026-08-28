@@ -1,0 +1,91 @@
+.overlay {
+  position: fixed;
+  z-index: 90;
+  inset: 72px 0 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(223, 223, 223, 0.44);
+}
+
+.modal {
+  width: min(543px, 100%);
+  padding: 48px 96px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+
+  color: var(--main);
+  background: var(--page-background);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(16, 24, 40, 0.12);
+}
+
+.spinner {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+
+  border: 5px solid var(--badges);
+  border-top-color: var(--grey-green);
+  border-right-color: var(--grey-green);
+  border-radius: 50%;
+
+  animation: spin 0.9s linear infinite;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.description {
+  max-width: 300px;
+  margin: 0;
+
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .modal {
+    padding: 40px 24px;
+  }
+
+  .spinner {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
