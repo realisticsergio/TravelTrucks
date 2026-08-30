@@ -1,15 +1,87 @@
 .page {
   width: min(1312px, calc(100% - 128px));
   margin-inline: auto;
-  padding-top: 48px;
+  padding-top: 64px;
   padding-bottom: 80px;
 }
+.topSection {
+  display: grid;
+  grid-template-columns: 638px 1fr;
+  align-items: start;
+  gap: 24px;
+}
 
-.page > h1 {
+.galleryColumn,
+.infoColumn {
+  min-width: 0;
+}
+
+.infoColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.camperInfo {
+  width: 100%;
+  padding: 24px;
+  border-radius: 16px;
+  background: var(--surface-soft);
+}
+
+.camperInfo h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.camperInfo .meta {
+  margin-top: 8px;
+}
+
+.camperInfo .price {
+  margin: 16px 0 24px;
+}
+
+.camperInfo .description {
+  margin: 0;
+}
+.vehicleDetails {
+  width: 100%;
+  padding: 24px;
+  border-radius: 16px;
+  background: var(--surface-soft);
+}
+
+.vehicleDetails h2 {
+  margin: 0 0 16px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.vehicleDetails .badges {
+  margin-bottom: 16px;
+}
+
+.vehicleDetails .detailsList {
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.vehicleDetails .detailsList div {
+  margin-top: 8px;
+}
+
+.vehicleDetails .detailsList div:first-child {
+  margin-top: 0;
+}
+/* .page > h1 {
   margin: 0;
   font-size: 24px;
   line-height: 32px;
-}
+} */
 
 .status {
   width: 100%;
@@ -48,7 +120,7 @@
 
 .rating svg,
 .stars {
-  color: var(--yellow);
+  color: var(--rating);
 }
 
 .price {
@@ -79,13 +151,13 @@
   object-fit: cover;
 } */
 .gallery {
-  width: min(632px, 100%);
+  width: min(638px, 100%);
 }
 
 .mainImage {
   position: relative;
   width: 100%;
-  height: 480px;
+  height: 505px;
   overflow: hidden;
   border-radius: 16px;
   background: var(--badges);
@@ -96,21 +168,21 @@
 }
 
 .thumbnails {
-  margin-top: 16px;
+  margin-top: 27px;
   display: flex;
-  gap: 16px;
+  gap: 32px;
   overflow-x: auto;
 }
 
 .thumbnail {
   position: relative;
-  width: 132px;
-  height: 96px;
-  flex: 0 0 132px;
+  width: 136px;
+  height: 144px;
+  flex: 0 0 136px;
   overflow: hidden;
   padding: 0;
-  border: 2px solid transparent;
-  border-radius: 12px;
+  border: 3px solid transparent;
+  border-radius: 16px;
   background: var(--badges);
   cursor: pointer;
 }
@@ -134,7 +206,7 @@
   line-height: 24px;
 }
 
-.tabs {
+/* .tabs {
   display: flex;
   gap: 40px;
   border-bottom: 1px solid var(--border);
@@ -149,9 +221,9 @@
   font-size: 20px;
   font-weight: 600;
   cursor: pointer;
-}
+} */
 
-.activeTab::after {
+/* .activeTab::after {
   content: "";
   position: absolute;
   right: 0;
@@ -159,21 +231,43 @@
   left: 0;
   height: 5px;
   background: var(--accent);
-}
+} */
 
-.columns {
-  margin-top: 44px;
+/* .columns {
+  margin-top: 24px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  gap: 48px;
+} */
+.columns {
+  margin-top: 88px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 641px;
+  align-items: start;
+  gap: 48px;
+}
+.reviewsColumn {
+  min-width: 0;
 }
 
-.tabContent {
-  min-height: 588px;
-  padding: 44px 52px;
-  border-radius: 10px;
-  background: var(--surface-soft);
+.reviewsColumn > h2 {
+  margin: 0 0 24px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
 }
+
+.reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+/* .tabContent {
+  min-height: 0;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--surface-soft);
+} */
 
 .badges {
   display: flex;
@@ -200,8 +294,8 @@
   height: 20px;
 }
 
-.featureBadges {
-  margin-bottom: 100px;
+/* .featureBadges {
+  margin-bottom: 16px;
 }
 
 .tabContent h2 {
@@ -210,7 +304,7 @@
   border-bottom: 1px solid var(--border);
   font-size: 20px;
   line-height: 24px;
-}
+} */
 
 .detailsList {
   margin: 24px 0 0;
@@ -228,9 +322,11 @@
 }
 
 .booking {
-  padding: 44px 57px;
+  width: 100%;
+  margin-top: 56px;
+  padding: 44px;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 16px;
 }
 
 .booking h2 {
@@ -298,17 +394,32 @@
   pointer-events: none;
 }
 
-.submitButton {
+/* .submitButton {
   margin: 10px auto 0;
   display: flex;
+} */
+.submitButton {
+  width: 100%;
+  min-height: 56px;
+  margin: 10px 0 0;
+  padding: 16px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 200px;
 }
-
-.reviews article {
+/* .reviews article {
   margin-bottom: 40px;
   display: grid;
   grid-template-columns: 60px 1fr;
+} */
+.reviews article {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  border-radius: 16px;
+  background: var(--surface-soft);
 }
-
 .avatar {
   grid-row: span 2;
   width: 60px;
@@ -335,7 +446,7 @@
 
 .reviews article p {
   grid-column: 1 / -1;
-  margin: 18px 0 0;
+  margin: 16px 0 0;
   color: var(--text);
   line-height: 24px;
 }
@@ -357,16 +468,17 @@
 }
 
 @media (max-width: 1000px) {
+  .topSection,
   .columns {
     grid-template-columns: 1fr;
   }
 
   .gallery {
-    gap: 16px;
+    width: 100%;
   }
 
-  .galleryButton {
-    height: 230px;
+  .booking {
+    margin-top: 0;
   }
 }
 
@@ -374,36 +486,37 @@
   .page {
     width: calc(100% - 32px);
     padding-top: 32px;
+    padding-bottom: 48px;
   }
 
-  /* .gallery {
-    grid-template-columns: 1fr;
+  .topSection {
+    gap: 32px;
   }
 
-  .galleryButton {
-    height: 260px;
-  } */
-  @media (max-width: 700px) {
-    .mainImage {
-      height: 320px;
-    }
-
-    .thumbnail {
-      width: 96px;
-      height: 72px;
-      flex-basis: 96px;
-    }
-  }
-  .columns {
-    margin-top: 28px;
+  .mainImage {
+    height: 320px;
   }
 
-  .tabContent,
+  .thumbnails {
+    margin-top: 16px;
+    gap: 16px;
+  }
+
+  .thumbnail {
+    width: 96px;
+    height: 72px;
+    flex-basis: 96px;
+    border-radius: 12px;
+  }
+
+  .camperInfo,
+  .vehicleDetails,
   .booking {
     padding: 28px 22px;
   }
 
-  .featureBadges {
-    margin-bottom: 50px;
+  .columns {
+    margin-top: 56px;
+    gap: 32px;
   }
 }

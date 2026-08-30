@@ -20,7 +20,7 @@
   position: relative;
   z-index: 1;
   width: min(1312px, calc(100% - 128px));
-  margin-inline: auto;
+  margin-left: 79px;
   color: var(--white);
 }
 
