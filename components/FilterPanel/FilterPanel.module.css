@@ -1,19 +1,7 @@
-/* .panel {
-  position: sticky;
-  top: 88px;
-  align-self: start;
-  width: 360px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-  align-self: start;
-  background: var(--surface-soft);
-  border-radius: 20px;
-} */
 .panel {
   position: sticky;
   top: 88px;
+  align-self: start;
   width: 360px;
   min-height: 840px;
   padding: 24px;
