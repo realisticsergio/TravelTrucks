@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
-  CalendarDays,
   Check,
+  CircleAlert,
   Fuel,
   MapPin,
   Settings2,
@@ -57,8 +57,10 @@ export function DetailsClient({ camperId }: { camperId: string }) {
     const name = String(data.get("name")).trim();
     const email = String(data.get("email")).trim();
 
+    const isValidName = name.length >= 2 && /^[\p{L}\s'-]+$/u.test(name);
+
     const errors = {
-      name: name.length < 2 ? "Please enter your name." : "",
+      name: isValidName ? "" : "Please enter your name.",
       email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
         ? ""
         : "Please enter your email.",
@@ -297,6 +299,7 @@ export function DetailsClient({ camperId }: { camperId: string }) {
 
           <div className={styles.formField}>
             <input
+              id="booking-name"
               className={formErrors.name ? styles.invalidField : ""}
               name="name"
               placeholder="Name*"
@@ -311,14 +314,22 @@ export function DetailsClient({ camperId }: { camperId: string }) {
             />
 
             {formErrors.name && (
-              <span id="name-error" className={styles.fieldError}>
-                {formErrors.name}
-              </span>
+              <>
+                <label htmlFor="booking-name" className={styles.errorLabel}>
+                  Name*
+                </label>
+
+                <CircleAlert className={styles.errorIcon} aria-hidden="true" />
+
+                <span id="name-error" className={styles.fieldError}>
+                  {formErrors.name}
+                </span>
+              </>
             )}
           </div>
-
           <div className={styles.formField}>
             <input
+              id="booking-email"
               className={formErrors.email ? styles.invalidField : ""}
               name="email"
               type="email"
@@ -334,19 +345,19 @@ export function DetailsClient({ camperId }: { camperId: string }) {
             />
 
             {formErrors.email && (
-              <span id="email-error" className={styles.fieldError}>
-                {formErrors.email}
-              </span>
+              <>
+                <label htmlFor="booking-email" className={styles.errorLabel}>
+                  Email*
+                </label>
+
+                <CircleAlert className={styles.errorIcon} aria-hidden="true" />
+
+                <span id="email-error" className={styles.fieldError}>
+                  {formErrors.email}
+                </span>
+              </>
             )}
           </div>
-
-          <div className={styles.dateField}>
-            <CalendarDays />
-
-            <input name="bookingDate" type="date" aria-label="Booking date" />
-          </div>
-
-          <textarea name="comment" placeholder="Comment" rows={4} />
 
           {booking.isError && (
             <p className={styles.formError}>

@@ -16,9 +16,20 @@
   background: var(--badges);
 }
 
-.image img { object-fit: cover; }
-.body { min-width: 0; display: flex; flex-direction: column; }
-.heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.image img {
+  object-fit: cover;
+}
+.body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
 
 .heading h2,
 .heading strong {
@@ -32,10 +43,27 @@
   white-space: nowrap;
 }
 
-.heading strong { flex-shrink: 0; }
-.meta { margin-top: 8px; display: flex; align-items: center; flex-wrap: wrap; gap: 16px; color: var(--main); font-size: 16px; line-height: 24px; }
-.meta span { display: flex; align-items: center; gap: 4px; }
-.rating svg { color: var(--yellow); }
+.heading strong {
+  flex-shrink: 0;
+}
+.meta {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: var(--main);
+  font-size: 16px;
+  line-height: 24px;
+}
+.meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.rating svg {
+  color: var(--yellow);
+}
 
 .description {
   margin: 24px 0;
@@ -46,9 +74,28 @@
   white-space: nowrap;
 }
 
-.badges { display: flex; flex-wrap: wrap; gap: 8px; }
-.badge { min-height: 48px; padding: 12px 18px; display: inline-flex; align-items: center; gap: 8px; border-radius: 100px; color: var(--main); background: var(--badges); font-weight: 500; line-height: 24px; text-transform: capitalize; }
-.badge svg { width: 20px; height: 20px; }
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.badge {
+  min-height: 48px;
+  padding: 12px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 100px;
+  color: var(--main);
+  background: var(--details-badge-background);
+  font-weight: 500;
+  line-height: 24px;
+  text-transform: capitalize;
+}
+.badge svg {
+  width: 20px;
+  height: 20px;
+}
 
 .showMore {
   width: 173px;
@@ -66,10 +113,19 @@
   transition: background-color 0.2s;
 }
 
-.showMore:hover { background: var(--accent-hover); }
+.showMore:hover {
+  background: var(--accent-hover);
+}
 
 @media (max-width: 700px) {
-  .card { grid-template-columns: 1fr; }
-  .image { min-height: 240px; }
-  .heading { align-items: flex-start; flex-direction: column; }
+  .card {
+    grid-template-columns: 1fr;
+  }
+  .image {
+    min-height: 240px;
+  }
+  .heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }

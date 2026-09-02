@@ -63,7 +63,12 @@
 .vehicleDetails .badges {
   margin-bottom: 16px;
 }
-
+.vehicleDetails .badge {
+  background: #e4e7ec;
+}
+.vehicleDetails .badge {
+  background: var(--details-badge-background);
+}
 .vehicleDetails .detailsList {
   margin: 0;
   padding-top: 16px;
@@ -339,8 +344,7 @@
   color: var(--muted);
 }
 
-.booking input,
-.booking textarea {
+.booking input {
   width: 100%;
   margin-bottom: 14px;
   padding: 18px;
@@ -348,15 +352,14 @@
   border-radius: 12px;
   outline: 0;
   color: var(--main);
-  background: var(--badges);
+  background: var(--inputs);
   resize: none;
 }
 
-.booking input::placeholder,
-.booking textarea::placeholder {
+.booking input::placeholder {
   color: var(--muted);
 }
-.formField {
+/* .formField {
   width: 100%;
   margin-bottom: 14px;
 }
@@ -380,20 +383,64 @@
 .booking .invalidField:focus {
   border-color: #f04438;
   outline: none;
-}
-.dateField {
+} */
+.formField {
   position: relative;
+  width: 100%;
+  margin-bottom: 14px;
 }
 
-.dateField svg {
+.formField input {
+  min-height: 60px;
+  margin-bottom: 0;
+}
+
+.booking .invalidField {
+  padding-right: 52px;
+  border: 1px solid #e44848;
+  color: var(--main);
+  background: #ffdfdf;
+}
+
+.booking .invalidField::placeholder {
+  color: transparent;
+}
+
+.booking .invalidField:focus {
+  border-color: #e44848;
+  outline: none;
+}
+
+.errorLabel {
   position: absolute;
-  z-index: 1;
-  top: 17px;
+  top: -8px;
+  left: 18px;
+  padding-inline: 8px;
+  border-radius: 8px;
+  color: #e44848;
+  background: #ffdfdf;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.errorIcon {
+  position: absolute;
+  top: 18px;
   right: 18px;
-  width: 20px;
+  width: 24px;
+  height: 24px;
+  color: #e44848;
   pointer-events: none;
 }
 
+.fieldError {
+  display: block;
+  margin-top: 0;
+  color: #e44848;
+  font-size: 16px;
+  line-height: 24px;
+}
 /* .submitButton {
   margin: 10px auto 0;
   display: flex;

@@ -24,6 +24,7 @@
   --accent: var(--grey-green);
   --accent-hover: var(--green-hover);
   --radio-color: #667085;
+  --details-badge-background: #e4e7ec;
 
   --font-family: "Inter", sans-serif;
   --second-family: "Manrope", sans-serif;
@@ -48,6 +49,7 @@ html[data-theme="dark"] {
   --accent: #a8beb5;
   --accent-hover: #bdd0c8;
   --radio-color: #a8beb5;
+  --details-badge-background: #34373c;
 
   background: var(--page-background);
   color: var(--main);
